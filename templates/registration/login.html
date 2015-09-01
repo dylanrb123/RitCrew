@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}Reserve A Boat{% endblock %}
+{% block content %}
+<div class="container">
+    {{ form|crispy }}
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <title> {% block title %} {% endblock %} </title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link href="{% static 'styles.css' %}" rel="stylesheet" media="screen">
+{% block extra_stylesheets %}
+
+{% endblock %}
+
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img id="crew-logo" alt="Brand" src="{% static 'img/crew_logo.png' %}">
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <input type="hidden" name="logout" value="logout"/>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                        <li style="margin-left: 10px">{{ user.username }}</li>
+                        <li><button type="submit" class="btn btn-default btn-sm" id="logout-btn">Logout</button> </li>
+
+                    {% else %}
+                        <li><a href="#" data-toggle="modal" data-target="#login-modal">Log In</a></li>
+                    {% endif %}
+                </ul>
+        </form>
+        </div>
+
+    </div>
+</nav>
+
+<div class="modal fade" id="login-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Log In</h4>
+            </div>
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ login_form|crispy }}
+                    <input type="hidden" name="login" value="login"/>
+                </div>
+                <div class="modal-footer">
+                    <span class="pull-left" id="new-account-link">
+                        <a href="#">Create an account</a>
+                    </span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="create-account-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create Account</h4>
+            </div>
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {{ create_account_form|crispy }}
+                    <input type="hidden" name="create_account" value="create_account"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{% block content %}
+
+{% endblock %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script>
+    $('#new-account-link').find('a').click(function() {
+        $('#login-modal').modal('hide');
+        $('#create-account-modal').modal('show');
+    });
+    {{ js_inject|safe }}
+</script>
+{% block extra_js %}
+
+{% endblock %}
+
+</body>
+</html>

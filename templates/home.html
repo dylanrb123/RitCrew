@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_filters %}
+{% block title %}Reserve Boat{% endblock %}
+{% block extra_stylesheets %}
+    <link rel='stylesheet' href="{% static 'fullcalendar/fullcalendar.css' %}" />
+    <link rel="stylesheet" href="{% static 'bootstrap-datetimepicker.css' %}" />
+{% endblock %}
+{% block content %}
+    <img id="tiger-logo" src="{% static 'img/tiger.png' %}" style="position: absolute; top: 70px; left: 10px;" class="hidden-xs hidden-sm hidden-md">
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="page-header">
+            <div class="pull-right">
+                {% if user.is_authenticated %}
+                <button class="btn btn-lg btn-primary" type="button" data-toggle="modal" data-target="#reservation-modal">New Reservation</button>
+                {% endif %}
+            </div>
+            <h1 style="width: 75%;">Reserve a Boat</h1>
+        </div>
+        <div id="calendar"></div>
+
+    </div>
+
+
+
+    <!-- Reservation Modal -->
+    <div class="modal fade" id="reservation-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">New Reservation</h4>
+                </div>
+                <form method="post" action="{% url 'home' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {{ reservation_form|crispy }}
+                        <input type="hidden" name="reservation" value="reservation"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Reserve Boat</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+{% block extra_js %}
+    <script src='{% static 'moment.js' %}'></script>
+    <script src='{% static 'fullcalendar/fullcalendar.js' %}'></script>
+    <script src="{% static 'bootstrap-datetime.js' %}"></script>
+    <script>
+        var events = [
+        {% for reservation in reservations %}
+            {
+                title: "{{ reservation.user.first_name }} {{ reservation.user.last_name }}\nBoat: {{ reservation.boat.name }}",
+                start: '{{ reservation.start_time|date:"c" }}',
+                end: '{{ reservation.end_time|date:"c" }}'
+            },
+        {% endfor %}
+        ];
+        $(document).ready(function() {
+            $('#calendar').fullCalendar( {
+                height: 'auto',
+                defaultView: 'agendaWeek',
+                minTime: '06:00:00',
+                maxTime: '19:00:00',
+                allDaySlot: false,
+                events: events
+            });
+        });
+        var options = {
+            sideBySide: true,
+            stepping: 15,
+            minDate: moment(),
+
+        };
+        $('#div_id_start_time').find('input').datetimepicker(options);
+        $('#div_id_end_time').find('input').datetimepicker(options);
+    </script>
+{% endblock %}

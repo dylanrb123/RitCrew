@@ -1,0 +1,26 @@
+#crew-logo {
+    height: 100%;
+}
+
+.navbar-brand {
+    padding: 5px;
+}
+
+.navbar {
+    font-size: 14px;
+}
+
+#new-account-link {
+    height: 100%;
+    margin-top: 10px;
+}
+
+.navbar li {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+#logout-btn {
+    margin-bottom: 2px;
+    margin-left: 10px;
+}
