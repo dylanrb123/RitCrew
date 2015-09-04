@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}I row and stuff{% endblock %}
+{% block content %}
+    <div class="container">
+        <a href="{% url 'home' %}"><img src="{% static 'img/tiger.png' %}" class="img-responsive" style="margin: 0 auto;"></a>
+    </div>
+{% endblock %}

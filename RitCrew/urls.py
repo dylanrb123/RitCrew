@@ -17,8 +17,10 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from BoatReservation import urls as reservation_urls
+from BoatReservation import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^reserve-boat/', include(reservation_urls))
+    url(r'^reserve-boat/', include(reservation_urls)),
+    url('^$', views.index, name='index')
 ]

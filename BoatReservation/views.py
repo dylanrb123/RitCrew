@@ -55,3 +55,6 @@ def home(request):
     context = {'login_form': login_form, 'create_account_form': create_account_form, 'reservation_form': reservation_form, 'js_inject': js_inject,
                'reservations': reservations}
     return render(request, template, context)
+
+def index(request):
+    return render(request, 'index.html')
