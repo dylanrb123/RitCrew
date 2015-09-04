@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="{% static 'bootstrap-datetimepicker.css' %}" />
 {% endblock %}
 {% block content %}
-    <img id="tiger-logo" src="{% static 'img/tiger.png' %}" style="position: absolute; top: 70px; left: 10px;" class="hidden-xs hidden-sm hidden-md">
-
-    <div class="container">
+    <div class="container-fluid">
+        <div class="col-md-2"><img src="{% static 'img/tiger.png' %}" style="width: 100%"></div>
+        <div class="col-md-8">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
@@ -28,7 +28,7 @@
             <h1 style="width: 75%;">Reserve a Boat</h1>
         </div>
         <div id="calendar"></div>
-
+    </div>
     </div>
 
 
