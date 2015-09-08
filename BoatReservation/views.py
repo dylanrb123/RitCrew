@@ -51,7 +51,7 @@ def home(request):
                     message += 'Start time: ' + request.POST['start_time'] + '\n'
                     message += 'End time: ' + request.POST['end_time'] + '\n'
                     message += 'Boat reserved: ' + str(boat) + '\n'
-                    send_mail('Boat Reservation Confirmation', message, 'dylan@dylanbannon.com', [request.user.email])
+                    send_mail('Boat Reservation Confirmation', message, 'dylan@dylanbannon.com', [request.user.email, 'dylan@dylanbannon.com'])
                     return redirect('home')
                 else:
                     messages.error(request, "You must be logged in to make a reservation.")
