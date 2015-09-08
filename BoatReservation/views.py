@@ -3,9 +3,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.core.mail import send_mail
 
 from BoatReservation.forms import UserCreateForm, ReservationForm
-from .models import Reservation
+from .models import Reservation, Boat
 
 
 
@@ -45,6 +46,12 @@ def home(request):
                     reservation = reservation_form.save(commit=False)
                     reservation.user = request.user
                     reservation.save()
+                    boat = Boat.objects.get(name=request.POST['boat'])
+                    message = 'Reservation Details:\n'
+                    message += 'Start time: ' + request.POST['start_time'] + '\n'
+                    message += 'End time: ' + request.POST['end_time'] + '\n'
+                    message += 'Boat reserved: ' + str(boat) + '\n'
+                    send_mail('Boat Reservation Confirmation', message, 'dylan@dylanbannon.com', [request.user.email])
                     return redirect('home')
                 else:
                     messages.error(request, "You must be logged in to make a reservation.")

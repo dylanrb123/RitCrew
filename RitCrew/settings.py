@@ -113,3 +113,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'BoatReservation/static')
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+
+from .local_settings import *
