@@ -46,7 +46,7 @@ def home(request):
                     reservation = reservation_form.save(commit=False)
                     reservation.user = request.user
                     reservation.save()
-                    boat = Boat.objects.get(name=request.POST['boat'])
+                    boat = Boat.objects.get(pk=request.POST['boat'])
                     message = 'Reservation Details:\n'
                     message += 'Start time: ' + request.POST['start_time'] + '\n'
                     message += 'End time: ' + request.POST['end_time'] + '\n'
