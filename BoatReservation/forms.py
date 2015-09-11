@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+
 __author__ = 'dbannon'
 
 from django import forms
@@ -24,10 +26,19 @@ class UserCreateForm(UserCreationForm):
             user.save()
         return user
 
+def validateNoReservationCollisions(reservation):
+    overlappingReservations = Reservation.objects.exclude(end_time__lt=reservation.start_time).exclude(start_time__gt=reservation.end_time)
+    for r in overlappingReservations:
+        if(r.boat == reservation.boat):
+            raise ValidationError( 'This boat is already reserved for this time slot', code="alreadyReserved")
+    return
+
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
         fields = ['start_time', 'end_time', 'boat']
+
+    default_validators = [validateNoReservationCollisions]
 
     start_time = forms.DateTimeField(input_formats=['%m/%d/%Y %I:%M %p'])
     end_time = forms.DateTimeField(input_formats=['%m/%d/%Y %I:%M %p'])
