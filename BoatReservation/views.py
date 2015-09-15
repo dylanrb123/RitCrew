@@ -1,3 +1,4 @@
+from smtplib import SMTPSenderRefused
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
@@ -51,7 +52,10 @@ def home(request):
                     message += 'Start time: ' + request.POST['start_time'] + '\n'
                     message += 'End time: ' + request.POST['end_time'] + '\n'
                     message += 'Boat reserved: ' + str(boat) + '\n'
-                    send_mail('Boat Reservation Confirmation', message, 'dylan@dylanbannon.com', [request.user.email, 'dylan@dylanbannon.com'])
+                    try:
+                        send_mail('Boat Reservation Confirmation', message, 'dylan@dylanbannon.com', [request.user.email, 'dylan@dylanbannon.com'])
+                    except SMTPSenderRefused:
+                        pass    #this occurs when the local_settings.py doesn't include the auth info
                     return redirect('home')
                 else:
                     messages.error(request, "You must be logged in to make a reservation.")
