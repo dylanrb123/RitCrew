@@ -35,7 +35,7 @@ class ReservationForm(forms.ModelForm):
     end_time = forms.DateTimeField(input_formats=['%m/%d/%Y %I:%M %p'])
 
     def clean(self):
-        overlappingReservations = Reservation.objects.exclude(end_time__lt=self.cleaned_data.get('start_time')).exclude(start_time__gt=self.cleaned_data.get('end_time'))
+        overlappingReservations = Reservation.objects.exclude(end_time__lte=self.cleaned_data.get('start_time')).exclude(start_time__gte=self.cleaned_data.get('end_time'))
         for r in overlappingReservations:
             if(r.boat == self.cleaned_data.get('boat')):
                 raise ValidationError( 'This boat is already reserved for this time slot', code="alreadyReserved")
