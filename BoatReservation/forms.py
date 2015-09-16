@@ -59,6 +59,7 @@ class ReservationForm(forms.ModelForm):
         '''
         Reservations can't start before 9:00 am and can't end after 6:00pm
         raises ValidationError if the start or end time is outside the acceptable range.
+        TODO: this should be field-level validation rather than form-level (shouldn't affect functionality)
         :return:
         '''
         if self.cleaned_data.get("start_time").hour < 9:
@@ -91,6 +92,7 @@ class ReservationForm(forms.ModelForm):
         '''
         Raises ValidationError if the reservation start time is before datetime.now()
         This is done in the front-end but it's best to do it back here too
+        TODO: this should be field-level validation rather than form-level (shouldn't affect functionality)
         :return:
         '''
         if(self.cleaned_data.get("start_time") < datetime.now()):
