@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from datetime import timedelta, datetime
 
 from .models import Reservation
@@ -96,5 +97,5 @@ class ReservationForm(forms.ModelForm):
         TODO: this should be field-level validation rather than form-level (shouldn't affect functionality)
         :return:
         '''
-        if(self.cleaned_data.get("start_time") < datetime.now()):
+        if(self.cleaned_data.get("start_time") < timezone.now()):
             raise ValidationError('Reservations cannot start in the past', code="spaceTimeContinuum")
