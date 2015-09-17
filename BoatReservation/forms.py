@@ -65,7 +65,8 @@ class ReservationForm(forms.ModelForm):
         if self.cleaned_data.get("start_time").hour < 9:
             raise ValidationError("Your reservation cannot start before 9:00 AM")
         end_time = self.cleaned_data.get("end_time")
-        if (end_time > datetime(end_time.year, end_time.month, end_time.day, 18)):
+        if ((end_time.hour == 18 and end_time.minute > 0) or end_time.hour > 18):
+            #this condition is "good enough", not perfect. Should really compare to another datetime, but that's complicated
             raise ValidationError("Your reservation cannot end after 6:00 PM")
 
     def validateAcceptableLength(self):
@@ -81,11 +82,11 @@ class ReservationForm(forms.ModelForm):
 
     def validateEndTimeAfterStartTime(self):
         '''
-        Raises ValidationError if the reservation end time is before or equal to the start time
+        Raises ValidationError if the reservation end time is before the start time
         I think this is done in the front-end but it's best to do it back here too
         :return:
         '''
-        if(self.cleaned_data.get("end_time") <= self.cleaned_data.get("start_time")):
+        if(self.cleaned_data.get("end_time") < self.cleaned_data.get("start_time")):
             raise ValidationError('Reservations cannot end before they start', code="wrongDirection")
 
     def validateInFuture(self):
