@@ -38,10 +38,10 @@ class ReservationForm(forms.ModelForm):
     def clean(self):
         if(len(self.errors) == 0):  #skip form validation if field validation found errors
             self.validateEndTimeAfterStartTime()
-            self.validateNotOverlapping()
-            self.validateInAcceptableDateRange()
-            self.validateAcceptableLength()
             self.validateInFuture()
+            self.validateAcceptableLength()
+            self.validateInAcceptableDateRange()
+            self.validateNotOverlapping()
         return self.cleaned_data
 
     def validateNotOverlapping(self):
